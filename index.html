@@ -3,134 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Pedidos - Mulher da Sopa</title>
+    <title>Soparia</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: #1e1e1e;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        }
-        h2, h3 {
-            color: #ff8c00;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #444;
-            background: #2d2d2d;
-            color: #fff;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #ff8c00;
-            color: white;
-            border: none;
-            padding: 12px;
-            width: 100%;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #e07b00;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f4f4f9; color: #333; }
+        h1 { text-align: center; color: #d35400; }
+        .cards-container { display: flex; gap: 10px; justify-content: space-between; margin-bottom: 20px; }
+        .card { background: white; border-radius: 8px; padding: 15px; text-align: center; flex: 1; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .card h3 { margin: 0 0 10px 0; color: #e67e22; }
+        .card p { font-weight: bold; font-size: 1.2em; margin: 10px 0; }
+        button { background-color: #d35400; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 5px; }
+        button:hover { background-color: #e67e22; }
+        .btn-add { background-color: #27ae60; }
+        .btn-add:hover { background-color: #2ecc71; }
+        .carrinho, .formulario { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        input, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .btn-whatsapp { background-color: #25D366; font-size: 1.1em; margin-top: 15px; }
+        .btn-whatsapp:hover { background-color: #128C7E; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h2>Mulher da Sopa - Checkout</h2>
-        
-        <div class="form-group">
-            <h3>Seu Pedido</h3>
-            <p id="resumo-pedido">1x Sopa Tradicional da Casa - R$ 15,00</p>
-            <p><strong>Total: R$ 15,00</strong></p>
+    <h1>Menu de Sopas</h1>
+
+    <div class="cards-container">
+        <div class="card">
+            <h3>350 ml</h3>
+            <p>R$ 7,00</p>
+            <button class="btn-add" onclick="adicionarItem('350ml')">Adicionar</button>
         </div>
+        <div class="card">
+            <h3>500 ml</h3>
+            <p>R$ 10,00</p>
+            <button class="btn-add" onclick="adicionarItem('500ml')">Adicionar</button>
+        </div>
+        <div class="card">
+            <h3>1 Litro</h3>
+            <p>R$ 20,00</p>
+            <button class="btn-add" onclick="adicionarItem('1L')">Adicionar</button>
+        </div>
+    </div>
 
-        <form id="order-form">
-            <div class="form-group">
-                <label for="nome">Nome Completo:</label>
-                <input type="text" id="nome" required placeholder="Digite seu nome">
-            </div>
+    <div class="carrinho">
+        <h2>Seu Carrinho</h2>
+        <div id="lista-carrinho">Nenhum item adicionado.</div>
+        <h3 style="text-align: right;">Total: R$ <span id="total">0,00</span></h3>
+    </div>
 
-            <div class="form-group">
-                <label for="endereco">Endereço de Entrega:</label>
-                <input type="text" id="endereco" required placeholder="Rua, número, bairro">
-            </div>
+    <div class="formulario">
+        <h2>Dados da Entrega</h2>
+        <input type="text" id="nome" placeholder="Seu Nome" required>
+        <input type="text" id="endereco" placeholder="Endereço Completo" required>
+        <input type="text" id="whatsapp" placeholder="Seu WhatsApp (Ex: 849...)" required>
+        
+        <select id="pagamento">
+            <option value="Dinheiro">Dinheiro</option>
+            <option value="Pix">Pix</option>
+        </select>
 
-            <div class="form-group">
-                <label for="pagamento">Forma de Pagamento:</label>
-                <select id="pagamento" required>
-                    <option value="">Selecione...</option>
-                    <option value="Pix">Pix</option>
-                    <option value="Dinheiro">Dinheiro</option>
-                    <option value="Cartão">Cartão</option>
-                </select>
-            </div>
-
-            <button type="submit">Finalizar Pedido</button>
-        </form>
+        <button onclick="enviarParaWhatsApp()">Enviar Pedido no WhatsApp</button>
     </div>
 
     <script>
-        // URL gerada pelo Localtunnel
-        const BACKEND_URL = 'https://silver-brooms-deny.loca.lt';
+        const precos = { '350ml': 7, '500ml': 10, '1L': 20 };
+        let carrinho = { '350ml': 0, '500ml': 0, '1L': 0 };
 
-        document.getElementById('order-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
+        function adicionarItem(tamanho) {
+            carrinho[tamanho]++;
+            atualizarCarrinho();
+        }
 
-            const pedidoData = {
-                nome: document.getElementById('nome').value,
-                endereco: document.getElementById('endereco').value,
-                pagamento: document.getElementById('pagamento').value,
-                itens: '1x Sopa Tradicional da Casa',
-                total: '15,00'
-            };
-
-            try {
-                const response = await fetch(`${BACKEND_URL}/api/pedidos`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Bypass-Tunnel-Reminder': 'true' // Essencial para o Localtunnel liberar o pedido
-                    },
-                    body: JSON.stringify(pedidoData)
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    alert('Pedido realizado com sucesso!');
-                    document.getElementById('order-form').reset();
-                } else {
-                    alert('Erro ao enviar pedido.');
-                }
-            } catch (error) {
-                console.error('Erro de conexão:', error);
-                alert('Erro ao conectar com o servidor backend. Verifique se o server.js está rodando e se a URL está correta!');
+        function removerItem(tamanho) {
+            if (carrinho[tamanho] > 0) {
+                carrinho[tamanho]--;
+                atualizarCarrinho();
             }
-        });
-    </script>
+        }
 
+        function atualizarCarrinho() {
+            const lista = document.getElementById('lista-carrinho');
+            lista.innerHTML = '';
+            let total = 0;
+            let itens = 0;
+
+            for (const [tamanho, quantidade] of Object.entries(carrinho)) {
+                if (quantidade > 0) {
+                    itens++;
+                    const subtotal = quantidade * precos[tamanho];
+                    total += subtotal;
+                    
+                    lista.innerHTML += `
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>${quantidade}x Sopa ${tamanho}</span>
+                            <span>R$ ${subtotal.toFixed(2).replace('.', ',')}</span>
+                            <button style="width: auto; padding: 2px 8px; margin: 0; background: #e74c3c;" onclick="removerItem('${tamanho}')">X</button>
+                        </div>
+                    `;
+                }
+            }
+
+            if (itens === 0) lista.innerHTML = 'Nenhum item adicionado.';
+            document.getElementById('total').innerText = total.toFixed(2).replace('.', ',');
+        }
+
+        function enviarParaWhatsApp() {
+            const nome = document.getElementById('nome').value;
+            const endereco = document.getElementById('endereco').value;
+            const whatsapp = document.getElementById('whatsapp').value;
+            const pagamento = document.getElementById('pagamento').value;
+            const total = document.getElementById('total').innerText;
+
+            if (!nome || !endereco || !whatsapp || total === '0,00') {
+                alert('Preencha todos os campos e adicione itens ao carrinho.');
+                return;
+            }
+
+            const numeroLoja = "5584999863991";
+            
+            let textoItens = "";
+            for (const [tamanho, quantidade] of Object.entries(carrinho)) {
+                if (quantidade > 0) {
+                    textoItens += `• ${quantidade}x Sopa ${tamanho} (R$ ${(quantidade * precos[tamanho]).toFixed(2).replace('.', ',')})%0A`;
+                }
+            }
+
+            const mensagem = `*NOVO PEDIDO - SOPARIA*%0A%0A*Cliente:* ${nome}%0A*Endereço:* ${endereco}%0A*WhatsApp:* ${whatsapp}%0A%0A*Itens do Pedido:*%0A${textoItens}%0A*Total:* R$ ${total}%0A*Forma de Pagamento:* ${pagamento}`;
+
+            window.open(`https://wa.me/${numeroLoja}?text=${mensagem}`, '_blank');
+        }
+    </script>
 </body>
 </html>
