@@ -1,148 +1,66 @@
 const express = require('express');
 const cors = require('cors');
-const { createCanvas } = require('canvas');
-const path = require('path');
-const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
+const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors()); // Permite que o site (GitHub Pages) se comunique com o seu servidor local
 
-// Serve os arquivos do site
-app.use(express.static(path.join(__dirname, '..')));
-
-// Configurando o cliente do WhatsApp no servidor
+// Configuração do Robô do WhatsApp
 const client = new Client({
     authStrategy: new LocalAuth()
 });
 
 client.on('qr', (qr) => {
-    console.log('\n--- ESCANEIE ESTE QR CODE COM O WHATSAPP DA LOJA ---');
     qrcode.generate(qr, { small: true });
+    console.log('Escaneie o QR Code abaixo com o WhatsApp da loja:');
 });
 
 client.on('ready', () => {
-    console.log('✅ Robô do WhatsApp conectado e pronto para enviar os pedidos!');
+    console.log('Robô do WhatsApp conectado e pronto!');
 });
 
 client.initialize();
 
-// Substitua pelo número da loja com DDI e DDD (Ex: 55 + DDD + Número + @c.us)
-const NUMERO_LOJA = '558499863991@c.us';
-
-// Rota que recebe o pedido, gera o comprovante e envia direto no WhatsApp
-app.post('/gerar-comprovante', async (req, res) => {
+// Rota que o site chama ao finalizar o pedido
+app.post('/pedido', async (req, res) => {
     try {
-        const { nome, endereco, pagamento, itens, total } = req.body;
+        const { nome, endereco, whatsapp, pagamento, carrinho, total } = req.body;
 
-        if (!nome || !endereco || !itens) {
-            return res.status(400).json({ erro: 'Dados incompletos.' });
+        // Monta a lista de itens
+        let textoItens = '';
+        const precos = { '350ml': 7, '500ml': 10, '1L': 20 };
+        
+        for (const [tamanho, quantidade] of Object.entries(carrinho)) {
+            if (quantidade > 0) {
+                textoItens += `• ${quantidade}x Sopa ${tamanho} (R$ ${(quantidade * precos[tamanho]).toFixed(2).replace('.', ',')})\n`;
+            }
         }
 
-        // Criando a imagem do recibo no servidor
-        const canvas = createCanvas(400, 600);
-        const ctx = canvas.getContext('2d');
+        const mensagem = `*NOVO PEDIDO - SOPARIA*\n\n` +
+                         `*Cliente:* ${nome}\n` +
+                         `*Endereço:* ${endereco}\n` +
+                         `*WhatsApp:* ${whatsapp}\n\n` +
+                         `*Itens do Pedido:*\n${textoItens}\n` +
+                         `*Total:* R$ ${total}\n` +
+                         `*Forma de Pagamento:* ${pagamento}`;
 
-        // Fundo Branco
-        ctx.fillStyle = '#FFFFFF';
-        ctx.fillRect(0, 0, 400, 600);
+        // Número da Loja (ex: 55 + DDD + Número)
+        const numeroLoja = '5584999863991@c.us';
 
-        // Cabeçalho
-        ctx.fillStyle = '#E65100';
-        ctx.font = 'bold 22px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText('A MULHER DA SOPA', 200, 40);
+        // Envia a mensagem automaticamente pelo WhatsApp
+        await client.sendMessage(numeroLoja, mensagem);
 
-        ctx.fillStyle = '#555555';
-        ctx.font = '12px Arial';
-        ctx.fillText('Sopa de rua, feita com amor!', 200, 65);
+        console.log(`✅ Pedido de ${nome} processado e enviado para o WhatsApp!`);
+        res.status(200).json({ success: true, message: 'Pedido enviado com sucesso!' });
 
-        // Linha divisória
-        ctx.strokeStyle = '#CCCCCC';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(20, 80);
-        ctx.lineTo(380, 80);
-        ctx.stroke();
-
-        // Dados do Cliente
-        ctx.fillStyle = '#000000';
-        ctx.font = '14px Arial';
-        ctx.textAlign = 'left';
-        ctx.fillText(`Cliente: ${nome}`, 20, 115);
-        ctx.fillText(`Endereço: ${endereco}`, 20, 145);
-        ctx.fillText(`Pagamento: ${pagamento}`, 20, 175);
-
-        // Linha divisória
-        ctx.beginPath();
-        ctx.moveTo(20, 200);
-        ctx.lineTo(380, 200);
-        ctx.stroke();
-
-        // Itens do Pedido
-        ctx.font = 'bold 14px Arial';
-        ctx.fillText('ITENS DO PEDIDO:', 20, 230);
-
-        let posicaoY = 260;
-        ctx.font = '14px Arial';
-        
-        itens.forEach(item => {
-            const textoItem = `${item.qtd}x ${item.nome}`;
-            const precoItem = `R$ ${(item.preco * item.qtd).toFixed(2).replace('.', ',')}`;
-            
-            ctx.fillText(textoItem, 20, posicaoY);
-            ctx.textAlign = 'right';
-            ctx.fillText(precoItem, 380, posicaoY);
-            
-            ctx.textAlign = 'left';
-            posicaoY += 30;
-        });
-
-        // Linha divisória do total
-        ctx.beginPath();
-        ctx.moveTo(20, posicaoY + 10);
-        ctx.lineTo(380, posicaoY + 10);
-        ctx.stroke();
-
-        // Total
-        ctx.font = 'bold 18px Arial';
-        ctx.fillText('TOTAL:', 20, posicaoY + 45);
-        ctx.textAlign = 'right';
-        ctx.fillText(`R$ ${total.replace('.', ',')}`, 380, posicaoY + 45);
-
-        // Converte o canvas para Base64
-        const buffer = canvas.toBuffer('image/png');
-        const base64Image = buffer.toString('base64');
-
-        // Cria a mídia para o WhatsApp
-        const media = new MessageMedia('image/png', base64Image, 'comprovante-pedido.png');
-
-        let itensTexto = '';
-        itens.forEach(item => {
-            const sub = item.preco * item.qtd;
-            itensTexto += `• ${item.qtd}x ${item.nome} (R$ ${sub.toFixed(2).replace('.', ',')})\n`;
-        });
-
-        const legenda = `*NOVO PEDIDO - A MULHER DA SOPA*\n\n` +
-            `*Cliente:* ${nome}\n` +
-            `*Endereço:* ${endereco}\n` +
-            `*Pagamento:* ${pagamento}\n\n` +
-            `*ITENS:*\n${itensTexto}\n` +
-            `*TOTAL:* R$ ${total.replace('.', ',')}`;
-
-        // Envia a imagem e o texto diretamente para o WhatsApp da loja
-        await client.sendMessage(NUMERO_LOJA, media, { caption: legenda });
-
-        res.json({ sucesso: true, mensagem: 'Pedido enviado diretamente para o WhatsApp da loja!' });
-
-    } catch (erro) {
-        console.error('Erro ao enviar mensagem:', erro);
-        res.status(500).json({ erro: 'Erro ao enviar para o WhatsApp.' });
+    } catch (error) {
+        console.error('❌ Erro ao enviar mensagem:', error);
+        res.status(500).json({ success: false, error: error.message });
     }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
+app.listen(3000, () => {
+    console.log('Servidor rodando na porta 3000');
 });
