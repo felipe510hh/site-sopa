@@ -111,7 +111,8 @@
                 const response = await fetch(`${BACKEND_URL}/api/pedidos`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Bypass-Tunnel-Reminder': 'true' // Essencial para o Localtunnel liberar o pedido
                     },
                     body: JSON.stringify(pedidoData)
                 });
