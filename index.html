@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A Mulher da Sopa - Pedidos Online</title>
 
+    <!-- Biblioteca para transformar HTML em Imagem -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
@@ -164,7 +165,9 @@
 
         /* COMPROVANTE VISUAL (ESCONDIDO) */
         #comprovante-visual {
-            display: none;
+            position: absolute;
+            left: -9999px;
+            top: -9999px;
             width: 350px;
             padding: 20px;
             background: #FFFFFF;
@@ -194,11 +197,12 @@
         <p class="subtitulo">Sopa de rua, feita com amor!</p>
     </header>
 
+    <!-- CARDÁPIO -->
     <div class="secao">
         <h2>Cardápio do Dia</h2>
 
         <div class="card-sopa">
-            <img src="sopa1.jpg" alt="Sopa Especial 1">
+            <img src="sopa1.jpg" alt="Sopa 1">
             <div class="card-detalhes">
                 <h3>Sopa de Carne com Legumes</h3>
                 <span class="preco">R$ 15,00</span>
@@ -207,7 +211,7 @@
         </div>
 
         <div class="card-sopa">
-            <img src="sopa2.jpg" alt="Sopa Especial 2">
+            <img src="sopa2.jpg" alt="Sopa 2">
             <div class="card-detalhes">
                 <h3>Sopa Tradicional da Casa</h3>
                 <span class="preco">R$ 15,00</span>
@@ -216,7 +220,7 @@
         </div>
 
         <div class="card-sopa">
-            <img src="sopa3.jpg" alt="Sopa Especial 3">
+            <img src="sopa3.jpg" alt="Sopa 3">
             <div class="card-detalhes">
                 <h3>Sopa de Costela com Macarrão</h3>
                 <span class="preco">R$ 18,00</span>
@@ -225,6 +229,7 @@
         </div>
     </div>
 
+    <!-- CARRINHO -->
     <div class="secao">
         <h2>Seu Pedido</h2>
         <div id="itens-carrinho">
@@ -237,6 +242,7 @@
         </div>
     </div>
 
+    <!-- DADOS -->
     <div class="secao">
         <h2>Dados para Entrega</h2>
         <label>Nome Completo:</label>
@@ -255,6 +261,7 @@
         <button class="btn-enviar" onclick="finalizarEEnviar()">Enviar Pedido no WhatsApp</button>
     </div>
 
+    <!-- ESTRUTURA OCULTA DO COMPROVANTE PARA GERAR A IMAGEM -->
     <div id="comprovante-visual">
         <h2>A MULHER DA SOPA</h2>
         <p style="text-align: center; font-size: 12px; color: #555;">Sopa de rua, feita com amor!</p>
@@ -276,7 +283,7 @@
 
     <script>
         let carrinho = [];
-        const numeroLoja = '558499863991'; // Número com DDD atualizado
+        const numeroLoja = '558499863991';
 
         function adicionarItem(nome, preco) {
             const item = carrinho.find(i => i.nome === nome);
@@ -326,7 +333,6 @@
                 return;
             }
 
-            // Data e Hora de Brasília
             const agora = new Date();
             const dataFormatada = new Intl.DateTimeFormat('pt-BR', {
                 timeZone: 'America/Sao_Paulo',
@@ -334,7 +340,6 @@
                 hour: '2-digit', minute: '2-digit'
             }).format(agora);
 
-            // Preenche o recibo para gerar a imagem
             document.getElementById('recibo-data').innerText = dataFormatada;
             document.getElementById('recibo-nome').innerText = nome;
             document.getElementById('recibo-endereco').innerText = endereco;
@@ -356,18 +361,18 @@
             document.getElementById('recibo-itens').innerHTML = itensHtml;
             document.getElementById('recibo-total').innerText = totalFmt;
 
-            // Renderiza imagem
+            // Gera a imagem do comprovante e força o download imediato
             const reciboVisual = document.getElementById('comprovante-visual');
-            reciboVisual.style.display = 'block';
-
-            let blobImagem = null;
             try {
                 const canvas = await html2canvas(reciboVisual, { scale: 2 });
-                blobImagem = await new Promise(res => canvas.toBlob(res, 'image/png'));
+                const imagemUrl = canvas.toDataURL('image/png');
+                
+                const link = document.createElement('a');
+                link.href = imagemUrl;
+                link.download = `comprovante-sopa-${Date.now()}.png`;
+                link.click();
             } catch (err) {
-                console.error("Erro ao converter imagem", err);
-            } finally {
-                reciboVisual.style.display = 'none';
+                console.error("Erro ao gerar imagem", err);
             }
 
             const mensagem = `*NOVO PEDIDO - A MULHER DA SOPA*\n` +
@@ -378,32 +383,18 @@
                 `*ITENS:*\n${itensTexto}\n` +
                 `*TOTAL:* R$ ${totalFmt}`;
 
-            if (blobImagem) {
-                const arquivo = new File([blobImagem], `comprovante.png`, { type: 'image/png' });
-
-                // Tentativa de compartilhamento direto da imagem (Mobile)
-                if (navigator.canShare && navigator.canShare({ files: [arquivo] })) {
-                    try {
-                        await navigator.share({
-                            files: [arquivo],
-                            title: 'Comprovante do Pedido',
-                            text: mensagem
-                        });
-                        return;
-                    } catch (e) {
-                        console.log(e);
-                    }
+            // Copia o texto para a área de transferência do celular/computador
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                try {
+                    await navigator.clipboard.writeText(mensagem);
+                } catch (e) {
+                    console.log(e);
                 }
-
-                // Download da imagem caso o compartilhamento nativo falhe/seja desktop
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blobImagem);
-                link.download = `comprovante.png`;
-                link.click();
-                alert('A imagem do comprovante foi salva no seu dispositivo. Anexe-a na conversa que abrirá!');
             }
 
-            // Redirecionamento padrão para o WhatsApp da Loja
+            alert('✅ Imagem do comprovante salva no seu celular!\n\nAgora o WhatsApp vai abrir. Basta anexar a imagem que acabou de baixar e colar o texto do pedido!');
+
+            // Abre o WhatsApp da Loja
             window.open(`https://wa.me/${numeroLoja}?text=${encodeURIComponent(mensagem)}`, '_blank');
         }
     </script>
