@@ -17,8 +17,8 @@
         .btn-add:hover { background-color: #2ecc71; }
         .carrinho, .formulario { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         input, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        .btn-whatsapp { background-color: #25D366; font-size: 1.1em; margin-top: 15px; }
-        .btn-whatsapp:hover { background-color: #128C7E; }
+        .btn-enviar { background-color: #25D366; font-size: 1.1em; margin-top: 15px; }
+        .btn-enviar:hover { background-color: #128C7E; }
     </style>
 </head>
 <body>
@@ -60,10 +60,13 @@
             <option value="Pix">Pix</option>
         </select>
 
-        <button onclick="enviarParaWhatsApp()">Enviar Pedido no WhatsApp</button>
+        <button class="btn-enviar" onclick="enviarPedido()">Finalizar e Enviar Pedido</button>
     </div>
 
     <script>
+        // URL gerada pelo Ngrok (Backend rodando no seu PC)
+        const BACKEND_URL = 'https://subsystem-preteen-chief.ngrok-free.dev';
+
         const precos = { '350ml': 7, '500ml': 10, '1L': 20 };
         let carrinho = { '350ml': 0, '500ml': 0, '1L': 0 };
 
@@ -105,7 +108,7 @@
             document.getElementById('total').innerText = total.toFixed(2).replace('.', ',');
         }
 
-        function enviarParaWhatsApp() {
+        async function enviarPedido() {
             const nome = document.getElementById('nome').value;
             const endereco = document.getElementById('endereco').value;
             const whatsapp = document.getElementById('whatsapp').value;
@@ -117,18 +120,34 @@
                 return;
             }
 
-            const numeroLoja = "5584999863991";
-            
-            let textoItens = "";
-            for (const [tamanho, quantidade] of Object.entries(carrinho)) {
-                if (quantidade > 0) {
-                    textoItens += `• ${quantidade}x Sopa ${tamanho} (R$ ${(quantidade * precos[tamanho]).toFixed(2).replace('.', ',')})%0A`;
+            const dadosPedido = {
+                nome,
+                endereco,
+                whatsapp,
+                pagamento,
+                carrinho,
+                total
+            };
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/pedido`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dadosPedido)
+                });
+
+                if (response.ok) {
+                    alert('Pedido realizado com sucesso! O robô enviou o comprovante para a loja.');
+                    location.reload();
+                } else {
+                    alert('Erro ao enviar pedido. Tente novamente.');
                 }
+            } catch (error) {
+                console.error('Erro de conexão:', error);
+                alert('Erro ao conectar com o servidor backend. Verifique se o server.js e o ngrok estão rodando.');
             }
-
-            const mensagem = `*NOVO PEDIDO - SOPARIA*%0A%0A*Cliente:* ${nome}%0A*Endereço:* ${endereco}%0A*WhatsApp:* ${whatsapp}%0A%0A*Itens do Pedido:*%0A${textoItens}%0A*Total:* R$ ${total}%0A*Forma de Pagamento:* ${pagamento}`;
-
-            window.open(`https://wa.me/${numeroLoja}?text=${mensagem}`, '_blank');
         }
     </script>
 </body>
