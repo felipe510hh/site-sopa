@@ -3,341 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Mulher da Sopa - Pedidos Online</title>
-
+    <title>Sistema de Pedidos - Mulher da Sopa</title>
     <style>
-        :root {
-            --amarelo-principal: #F3A712;
-            --laranja-destaque: #E65100;
-            --fundo-escuro: #121212;
-            --card-fundo: #1E1E1E;
-            --texto-claro: #FFFFFF;
-            --texto-secundario: #CCCCCC;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
         body {
-            background-color: var(--fundo-escuro);
-            color: var(--texto-claro);
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
             max-width: 600px;
             margin: 0 auto;
-            padding: 15px;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .logo-img {
-            max-width: 180px;
-            border-radius: 50%;
-            border: 3px solid var(--amarelo-principal);
-            box-shadow: 0 4px 10px rgba(243, 167, 18, 0.3);
-        }
-
-        h1 {
-            color: var(--amarelo-principal);
-            margin-top: 10px;
-            font-size: 24px;
-        }
-
-        .subtitulo {
-            color: var(--texto-secundario);
-            font-size: 14px;
-        }
-
-        .secao {
-            background-color: var(--card-fundo);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 20px;
-            border: 1px solid #333;
-        }
-
-        .secao h2 {
-            color: var(--amarelo-principal);
-            border-bottom: 2px solid var(--laranja-destaque);
-            padding-bottom: 5px;
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-
-        /* CARDÁPIO */
-        .card-sopa {
-            display: flex;
-            background: #2A2A2A;
+            background: #1e1e1e;
+            padding: 20px;
             border-radius: 8px;
-            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        h2, h3 {
+            color: #ff8c00;
+        }
+        .form-group {
             margin-bottom: 15px;
-            border: 1px solid #444;
         }
-
-        .card-sopa img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-        }
-
-        .card-detalhes {
-            padding: 10px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .card-detalhes h3 {
-            font-size: 16px;
-            color: #FFF;
-        }
-
-        .preco {
-            color: var(--amarelo-principal);
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        .btn-add {
-            background-color: var(--laranja-destaque);
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            align-self: flex-end;
-        }
-
-        .btn-add:hover {
-            background-color: #BF360C;
-        }
-
-        /* FORMULÁRIO */
         label {
             display: block;
-            margin-top: 10px;
-            color: var(--texto-secundario);
-            font-size: 14px;
+            margin-bottom: 5px;
+            font-weight: bold;
         }
-
-        input, select {
+        input, select, textarea {
             width: 100%;
             padding: 10px;
-            margin-top: 5px;
-            background: #2A2A2A;
             border: 1px solid #444;
-            color: #FFF;
-            border-radius: 5px;
+            background: #2d2d2d;
+            color: #fff;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
-
-        .btn-enviar {
-            background-color: #25D366;
+        button {
+            background-color: #ff8c00;
             color: white;
             border: none;
+            padding: 12px;
             width: 100%;
-            padding: 14px;
-            border-radius: 8px;
             font-size: 16px;
             font-weight: bold;
+            border-radius: 4px;
             cursor: pointer;
-            margin-top: 20px;
         }
-
-        .btn-enviar:hover {
-            background-color: #1EBE5D;
-        }
-
-        .linha-resumo {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
+        button:hover {
+            background-color: #e07b00;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <img src="logo.jpg" alt="A Mulher da Sopa" class="logo-img">
-        <h1>A Mulher da Sopa</h1>
-        <p class="subtitulo">Sopa de rua, feita com amor!</p>
-    </header>
+    <div class="container">
+        <h2>Mulher da Sopa - Checkout</h2>
+        
+        <div class="form-group">
+            <h3>Seu Pedido</h3>
+            <p id="resumo-pedido">1x Sopa Tradicional da Casa - R$ 15,00</p>
+            <p><strong>Total: R$ 15,00</strong></p>
+        </div>
 
-    <!-- CARDÁPIO -->
-    <div class="secao">
-        <h2>Cardápio do Dia</h2>
-
-        <div class="card-sopa">
-            <img src="sopa1.jpg" alt="Sopa 1">
-            <div class="card-detalhes">
-                <h3>Sopa de Carne com Legumes</h3>
-                <span class="preco">R$ 15,00</span>
-                <button class="btn-add" onclick="adicionarItem('Sopa de Carne com Legumes', 15.00)">+ Adicionar</button>
+        <form id="order-form">
+            <div class="form-group">
+                <label for="nome">Nome Completo:</label>
+                <input type="text" id="nome" required placeholder="Digite seu nome">
             </div>
-        </div>
 
-        <div class="card-sopa">
-            <img src="sopa2.jpg" alt="Sopa 2">
-            <div class="card-detalhes">
-                <h3>Sopa Tradicional da Casa</h3>
-                <span class="preco">R$ 15,00</span>
-                <button class="btn-add" onclick="adicionarItem('Sopa Tradicional da Casa', 15.00)">+ Adicionar</button>
+            <div class="form-group">
+                <label for="endereco">Endereço de Entrega:</label>
+                <input type="text" id="endereco" required placeholder="Rua, número, bairro">
             </div>
-        </div>
 
-        <div class="card-sopa">
-            <img src="sopa3.jpg" alt="Sopa 3">
-            <div class="card-detalhes">
-                <h3>Sopa de Costela com Macarrão</h3>
-                <span class="preco">R$ 18,00</span>
-                <button class="btn-add" onclick="adicionarItem('Sopa de Costela com Macarrão', 18.00)">+ Adicionar</button>
+            <div class="form-group">
+                <label for="pagamento">Forma de Pagamento:</label>
+                <select id="pagamento" required>
+                    <option value="">Selecione...</option>
+                    <option value="Pix">Pix</option>
+                    <option value="Dinheiro">Dinheiro</option>
+                    <option value="Cartão">Cartão</option>
+                </select>
             </div>
-        </div>
-    </div>
 
-    <!-- CARRINHO -->
-    <div class="secao">
-        <h2>Seu Pedido</h2>
-        <div id="itens-carrinho">
-            <p style="color: var(--texto-secundario);">Seu carrinho está vazio.</p>
-        </div>
-        <hr style="border-color: #444; margin: 10px 0;">
-        <div class="linha-resumo" style="font-size: 18px; font-weight: bold;">
-            <span>Total:</span>
-            <span style="color: var(--amarelo-principal);">R$ <span id="total-valor">0,00</span></span>
-        </div>
-    </div>
-
-    <!-- DADOS -->
-    <div class="secao">
-        <h2>Dados para Entrega</h2>
-        <label>Nome Completo:</label>
-        <input type="text" id="nome" placeholder="Digite seu nome">
-
-        <label>Endereço de Entrega:</label>
-        <input type="text" id="endereco" placeholder="Rua, Número e Bairro">
-
-        <label>Forma de Pagamento:</label>
-        <select id="pagamento">
-            <option value="Pix">Pix</option>
-            <option value="Cartão de Débito/Crédito">Cartão de Débito/Crédito</option>
-            <option value="Dinheiro">Dinheiro</option>
-        </select>
-
-        <button class="btn-enviar" onclick="finalizarEEnviar()">Gerar Pedido e Comprovante</button>
+            <button type="submit">Finalizar Pedido</button>
+        </form>
     </div>
 
     <script>
-        let carrinho = [];
-        const numeroLoja = '558499863991';
+        // URL gerada pelo Localtunnel
+        const BACKEND_URL = 'https://wild-candies-wear.loca.lt';
 
-        function adicionarItem(nome, preco) {
-            const item = carrinho.find(i => i.nome === nome);
-            if (item) {
-                item.qtd++;
-            } else {
-                carrinho.push({ nome, preco, qtd: 1 });
-            }
-            atualizarTela();
-        }
+        document.getElementById('order-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
 
-        function atualizarTela() {
-            const container = document.getElementById('itens-carrinho');
-            const totalEl = document.getElementById('total-valor');
-
-            if (carrinho.length === 0) {
-                container.innerHTML = '<p style="color: var(--texto-secundario);">Seu carrinho está vazio.</p>';
-                totalEl.innerText = '0,00';
-                return;
-            }
-
-            let html = '';
-            let total = 0;
-
-            carrinho.forEach(item => {
-                const subtotal = item.preco * item.qtd;
-                total += subtotal;
-                html += `
-                    <div class="linha-resumo">
-                        <span>${item.qtd}x ${item.nome}</span>
-                        <span>R$ ${subtotal.toFixed(2).replace('.', ',')}</span>
-                    </div>
-                `;
-            });
-
-            container.innerHTML = html;
-            totalEl.innerText = total.toFixed(2).replace('.', ',');
-        }
-
-        async function finalizarEEnviar() {
-            const nome = document.getElementById('nome').value.trim();
-            const endereco = document.getElementById('endereco').value.trim();
-            const pagamento = document.getElementById('pagamento').value;
-
-            if (!nome || !endereco || carrinho.length === 0) {
-                alert('Preencha seu nome, endereço e escolha pelo menos uma sopa!');
-                return;
-            }
-
-            let totalCalculado = 0;
-            let itensTexto = '';
-
-            carrinho.forEach(item => {
-                const sub = item.preco * item.qtd;
-                totalCalculado += sub;
-                itensTexto += `• ${item.qtd}x ${item.nome} (R$ ${sub.toFixed(2).replace('.', ',')})\n`;
-            });
-
-            const totalFmt = totalCalculado.toFixed(2);
+            const pedidoData = {
+                nome: document.getElementById('nome').value,
+                endereco: document.getElementById('endereco').value,
+                pagamento: document.getElementById('pagamento').value,
+                itens: '1x Sopa Tradicional da Casa',
+                total: '15,00'
+            };
 
             try {
-                // Faz a requisição para o nosso Backend Node.js gerar a imagem do recibo
-                const resposta = await fetch('http://localhost:3000/gerar-comprovante', {
+                const response = await fetch(`${BACKEND_URL}/api/pedidos`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        nome,
-                        endereco,
-                        pagamento,
-                        itens: carrinho,
-                        total: totalFmt
-                    })
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(pedidoData)
                 });
 
-                if (!resposta.ok) throw new Error('Erro ao gerar comprovante no servidor');
+                const result = await response.json();
 
-                // Converte a resposta do servidor em arquivo de imagem (Blob)
-                const blob = await resposta.blob();
-                const url = window.URL.createObjectURL(blob);
-                
-                // Força o download da imagem gerada pelo servidor
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = `comprovante-sopa-${Date.now()}.png`;
-                link.click();
-
-            } catch (err) {
-                console.error(err);
-                alert('Erro ao conectar com o servidor backend. Verifique se o server.js está rodando!');
-                return;
+                if (result.success) {
+                    alert('Pedido realizado com sucesso!');
+                    document.getElementById('order-form').reset();
+                } else {
+                    alert('Erro ao enviar pedido.');
+                }
+            } catch (error) {
+                console.error('Erro de conexão:', error);
+                alert('Erro ao conectar com o servidor backend. Verifique se o server.js está rodando e se a URL está correta!');
             }
-
-            const mensagem = `*NOVO PEDIDO - A MULHER DA SOPA*\n\n` +
-                `*Cliente:* ${nome}\n` +
-                `*Endereço:* ${endereco}\n` +
-                `*Pagamento:* ${pagamento}\n\n` +
-                `*ITENS:*\n${itensTexto}\n` +
-                `*TOTAL:* R$ ${totalFmt.replace('.', ',')}`;
-
-            alert('✅ Comprovante gerado pelo servidor e baixado!\n\nO WhatsApp vai abrir agora.');
-            window.open(`https://wa.me/${numeroLoja}?text=${encodeURIComponent(mensagem)}`, '_blank');
-        }
+        });
     </script>
+
 </body>
 </html>

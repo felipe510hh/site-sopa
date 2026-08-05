@@ -1,2 +1,3 @@
-2026/08/05-13:03:45.100 3778 Creating DB C:\Users\user\Documents\site sopa\backend-sopa\.wwebjs_auth\session\Default\Service Worker\Database since it was missing.
-2026/08/05-13:03:45.111 3778 Reusing MANIFEST C:\Users\user\Documents\site sopa\backend-sopa\.wwebjs_auth\session\Default\Service Worker\Database/MANIFEST-000001
+2026/08/05-13:43:01.645 3798 Reusing MANIFEST C:\Users\user\Documents\site sopa\backend-sopa\.wwebjs_auth\session\Default\Service Worker\Database/MANIFEST-000001
+2026/08/05-13:43:01.673 3798 Recovering log #3
+2026/08/05-13:43:01.674 3798 Reusing old log C:\Users\user\Documents\site sopa\backend-sopa\.wwebjs_auth\session\Default\Service Worker\Database/000003.log 

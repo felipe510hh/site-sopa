@@ -1,2 +1,3 @@
-2026/08/05-13:03:33.587 4e8c Creating DB C:\Users\user\Documents\site sopa\backend-sopa\.wwebjs_auth\session\Default\Sync Data\LevelDB since it was missing.
-2026/08/05-13:03:33.608 4e8c Reusing MANIFEST C:\Users\user\Documents\site sopa\backend-sopa\.wwebjs_auth\session\Default\Sync Data\LevelDB/MANIFEST-000001
+2026/08/05-13:43:01.635 b2c Reusing MANIFEST C:\Users\user\Documents\site sopa\backend-sopa\.wwebjs_auth\session\Default\Sync Data\LevelDB/MANIFEST-000001
+2026/08/05-13:43:01.675 b2c Recovering log #3
+2026/08/05-13:43:01.675 b2c Reusing old log C:\Users\user\Documents\site sopa\backend-sopa\.wwebjs_auth\session\Default\Sync Data\LevelDB/000003.log 
