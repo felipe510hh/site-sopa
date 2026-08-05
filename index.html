@@ -1,570 +1,411 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sopas da Vovó | Sopa quentinha na sua porta</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<style>
-  :root{
-    --bg-deep:#241811;
-    --bg-panel:#332318;
-    --bg-card:#3c2b1d;
-    --cream:#f6ecd9;
-    --cream-dim:#cbbca0;
-    --saffron:#e8a437;
-    --saffron-dark:#c2822a;
-    --herb:#8aab5f;
-    --paprika:#c85a35;
-    --line:rgba(246,236,217,.13);
-    --shadow: 0 18px 40px rgba(0,0,0,.35);
-  }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth;}
-  body{
-    background:
-      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(232,164,55,.10), transparent 60%),
-      radial-gradient(ellipse 700px 500px at 100% 0%, rgba(122,155,87,.08), transparent 55%),
-      var(--bg-deep);
-    color:var(--cream);
-    font-family:'Work Sans', sans-serif;
-    -webkit-font-smoothing:antialiased;
-  }
-  h1,h2,h3{font-family:'Fraunces', serif; font-weight:600; letter-spacing:-.01em;}
-  .mono{font-family:'JetBrains Mono', monospace;}
-  a{color:inherit;}
-  .wrap{max-width:1080px; margin:0 auto; padding:0 24px;}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Mulher da Sopa - Pedidos Online</title>
 
-  /* HEADER */
-  header{
-    position:sticky; top:0; z-index:40;
-    background:rgba(36,24,17,.86); backdrop-filter: blur(10px);
-    border-bottom:1px solid var(--line);
-  }
-  .nav{display:flex; align-items:center; justify-content:space-between; padding:16px 24px; max-width:1080px; margin:0 auto;}
-  .logo{display:flex; align-items:center; gap:10px; font-family:'Fraunces',serif; font-weight:700; font-size:1.25rem;}
-  .logo-mark{width:34px; height:34px; flex:none;}
-  .nav-links{display:flex; gap:28px; font-size:.92rem; font-weight:500; color:var(--cream-dim);}
-  .nav-links a{text-decoration:none; transition:color .2s;}
-  .nav-links a:hover{color:var(--saffron);}
-  .cart-btn{
-    position:relative; background:var(--saffron); color:#241811; border:none;
-    width:44px; height:44px; border-radius:50%; cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-    box-shadow: var(--shadow); transition:transform .15s;
-  }
-  .cart-btn:hover{transform:scale(1.06);}
-  .cart-badge{
-    position:absolute; top:-4px; right:-4px; background:var(--paprika); color:#fff;
-    font-size:.68rem; font-weight:700; border-radius:50%; min-width:18px; height:18px;
-    display:flex; align-items:center; justify-content:center; padding:0 4px; font-family:'Work Sans';
-  }
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-  /* HERO */
-  .hero{padding:76px 24px 60px; max-width:1080px; margin:0 auto; display:grid; grid-template-columns:1.1fr .9fr; gap:40px; align-items:center;}
-  .eyebrow{color:var(--saffron); text-transform:uppercase; letter-spacing:.14em; font-size:.75rem; font-weight:600; font-family:'JetBrains Mono';}
-  .hero h1{font-size:clamp(2.2rem, 4.2vw, 3.4rem); line-height:1.06; margin:14px 0 18px; font-style:italic;}
-  .hero h1 em{font-style:normal; color:var(--saffron);}
-  .hero p{color:var(--cream-dim); font-size:1.05rem; max-width:46ch; line-height:1.6; margin-bottom:28px;}
-  .btn-primary{
-    display:inline-flex; align-items:center; gap:10px; background:var(--saffron); color:#241811;
-    border:none; padding:15px 26px; border-radius:100px; font-weight:700; font-size:.98rem;
-    cursor:pointer; text-decoration:none; box-shadow:var(--shadow); transition:transform .15s, background .2s;
-  }
-  .btn-primary:hover{transform:translateY(-2px); background:#f0b354;}
+    <style>
+        :root {
+            --amarelo-principal: #F3A712;
+            --laranja-destaque: #E65100;
+            --fundo-escuro: #121212;
+            --card-fundo: #1E1E1E;
+            --texto-claro: #FFFFFF;
+            --texto-secundario: #CCCCCC;
+        }
 
-  /* Steam bowl signature element */
-  .bowl-scene{position:relative; height:320px; display:flex; align-items:flex-end; justify-content:center;}
-  .steam{position:absolute; bottom:150px; left:50%; width:120px; height:130px; transform:translateX(-50%);}
-  .wisp{position:absolute; bottom:0; width:10px; height:70px; border-radius:50%;
-    background:linear-gradient(to top, rgba(246,236,217,.55), rgba(246,236,217,0));
-    filter:blur(3px); animation:rise 3.2s ease-in-out infinite;}
-  .wisp:nth-child(1){left:28px; animation-delay:0s;}
-  .wisp:nth-child(2){left:56px; height:90px; animation-delay:.7s;}
-  .wisp:nth-child(3){left:84px; animation-delay:1.4s;}
-  @keyframes rise{
-    0%{transform:translateY(10px) scaleX(1); opacity:0;}
-    25%{opacity:.9;}
-    100%{transform:translateY(-90px) scaleX(1.6); opacity:0;}
-  }
-  .bowl-svg{width:260px; filter:drop-shadow(0 20px 30px rgba(0,0,0,.4));}
-  @media (prefers-reduced-motion: reduce){ .wisp{animation:none; opacity:.4;} }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-  /* SECTION HEADERS */
-  .section{padding:70px 24px;}
-  .section-head{margin-bottom:36px; max-width:640px;}
-  .section-head .eyebrow{display:block; margin-bottom:10px;}
-  .section-head h2{font-size:clamp(1.7rem,3vw,2.3rem);}
-  .section-head p{color:var(--cream-dim); margin-top:10px; line-height:1.6;}
+        body {
+            background-color: var(--fundo-escuro);
+            color: var(--texto-claro);
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 15px;
+        }
 
-  /* MENU */
-  #cardapio{background:var(--bg-panel); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
-  .menu-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
-  .card{
-    background:var(--bg-card); border:1px solid var(--line); border-radius:18px;
-    overflow:hidden; display:flex; flex-direction:column; transition:transform .2s, box-shadow .2s;
-  }
-  .card:hover{transform:translateY(-4px); box-shadow:var(--shadow);}
-  .card-img{width:100%; aspect-ratio:4/3; background:linear-gradient(160deg,#4a3524,#2e2015); display:flex; align-items:center; justify-content:center; position:relative;}
-  .card-img img{width:100%; height:100%; object-fit:cover;}
-  .card-body{padding:18px 18px 20px; display:flex; flex-direction:column; gap:6px; flex:1;}
-  .card-body h3{font-size:1.18rem;}
-  .card-body .desc{color:var(--cream-dim); font-size:.88rem; line-height:1.5; min-height:40px;}
-  .sizes{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;}
-  .size-btn{
-    flex:1; min-width:80px; background:transparent; border:1px solid var(--line); color:var(--cream);
-    border-radius:10px; padding:9px 6px; cursor:pointer; font-family:'Work Sans'; text-align:center;
-    transition:all .15s;
-  }
-  .size-btn .lbl{display:block; font-size:.72rem; color:var(--cream-dim);}
-  .size-btn .val{display:block; font-family:'JetBrains Mono'; font-weight:600; margin-top:2px; font-size:.92rem;}
-  .size-btn:hover{border-color:var(--saffron); background:rgba(232,164,55,.10);}
-  .size-btn:active{transform:scale(.96);}
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-  /* COMO FUNCIONA */
-  .steps{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
-  .step{border-top:1px solid var(--line); padding-top:16px;}
-  .step .num{font-family:'JetBrains Mono'; color:var(--saffron); font-weight:600;}
-  .step h3{margin:8px 0 6px; font-size:1.1rem;}
-  .step p{color:var(--cream-dim); font-size:.9rem; line-height:1.55;}
+        .logo-img {
+            max-width: 180px;
+            border-radius: 50%;
+            border: 3px solid var(--amarelo-principal);
+            box-shadow: 0 4px 10px rgba(243, 167, 18, 0.3);
+        }
 
-  /* FOOTER */
-  footer{padding:36px 24px; border-top:1px solid var(--line); text-align:center; color:var(--cream-dim); font-size:.85rem;}
-  footer a{color:var(--saffron); text-decoration:none;}
+        h1 {
+            color: var(--amarelo-principal);
+            margin-top: 10px;
+            font-size: 24px;
+        }
 
-  /* CART DRAWER */
-  .overlay{position:fixed; inset:0; background:rgba(15,10,6,.6); z-index:60; opacity:0; pointer-events:none; transition:opacity .25s;}
-  .overlay.open{opacity:1; pointer-events:auto;}
-  .drawer{
-    position:fixed; top:0; right:0; height:100%; width:min(420px, 92vw); background:var(--bg-panel);
-    z-index:70; transform:translateX(100%); transition:transform .3s ease; display:flex; flex-direction:column;
-    border-left:1px solid var(--line);
-  }
-  .drawer.open{transform:translateX(0);}
-  .drawer-head{padding:22px 22px 16px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center;}
-  .drawer-head h3{font-size:1.3rem;}
-  .close-btn{background:none; border:none; color:var(--cream); font-size:1.4rem; cursor:pointer; line-height:1;}
-  .drawer-body{flex:1; overflow-y:auto; padding:16px 22px;}
-  .empty-cart{color:var(--cream-dim); text-align:center; margin-top:60px; font-size:.92rem;}
-  .cart-item{display:flex; gap:12px; padding:14px 0; border-bottom:1px solid var(--line); align-items:center;}
-  .cart-item .info{flex:1;}
-  .cart-item .info .nm{font-weight:600; font-size:.95rem;}
-  .cart-item .info .sz{color:var(--cream-dim); font-size:.8rem;}
-  .qty{display:flex; align-items:center; gap:8px;}
-  .qty button{width:26px; height:26px; border-radius:50%; border:1px solid var(--line); background:transparent; color:var(--cream); cursor:pointer;}
-  .qty span{min-width:16px; text-align:center; font-family:'JetBrains Mono';}
-  .item-price{font-family:'JetBrains Mono'; font-weight:600; min-width:66px; text-align:right;}
-  .rm-btn{background:none; border:none; color:var(--paprika); cursor:pointer; font-size:1.1rem; padding:0 2px;}
+        .subtitulo {
+            color: var(--texto-secundario);
+            font-size: 14px;
+        }
 
-  .drawer-foot{border-top:1px solid var(--line); padding:18px 22px 24px;}
-  .total-row{display:flex; justify-content:space-between; font-family:'JetBrains Mono'; font-size:1.1rem; font-weight:600; margin-bottom:16px;}
+        .secao {
+            background-color: var(--card-fundo);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+        }
 
-  /* FORM inside drawer */
-  .field{margin-bottom:14px;}
-  .field label{display:block; font-size:.8rem; color:var(--cream-dim); margin-bottom:6px;}
-  .field input, .field select{
-    width:100%; background:var(--bg-card); border:1px solid var(--line); color:var(--cream);
-    padding:11px 12px; border-radius:9px; font-family:'Work Sans'; font-size:.94rem;
-  }
-  .field input::placeholder{color:#8c7a63;}
-  .field input:focus, .field select:focus{outline:2px solid var(--saffron); outline-offset:1px;}
-  .checkout-form{margin-top:6px; padding-top:12px; border-top:1px dashed var(--line);}
-  .checkout-form h4{font-size:.85rem; text-transform:uppercase; letter-spacing:.08em; color:var(--saffron); margin-bottom:14px;}
-  .btn-block{width:100%; background:var(--saffron); color:#241811; border:none; padding:15px; border-radius:12px; font-weight:700; font-size:1rem; cursor:pointer; transition:background .2s;}
-  .btn-block:hover{background:#f0b354;}
-  .btn-block:disabled{opacity:.5; cursor:not-allowed;}
+        .secao h2 {
+            color: var(--amarelo-principal);
+            border-bottom: 2px solid var(--laranja-destaque);
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
 
-  /* RECEIPT (offscreen render target) */
-  #recibo{
-    position:fixed; left:-9999px; top:0; width:380px; background:#fdf7ec; color:#2b1c10;
-    font-family:'Work Sans', sans-serif; padding:26px;
-  }
-  #recibo h2{font-family:'Fraunces',serif; font-size:1.4rem; text-align:center; color:#c1502e;}
-  #recibo .sub{text-align:center; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:#8c7a63; margin-top:2px;}
-  #recibo hr{border:none; border-top:1px dashed #cbb996; margin:14px 0;}
-  #recibo .row{display:flex; justify-content:space-between; font-size:.86rem; margin:5px 0;}
-  #recibo .label{color:#8c7a63;}
-  #recibo .total{font-family:'JetBrains Mono'; font-weight:700; font-size:1.2rem;}
-  #recibo .thanks{text-align:center; font-size:.72rem; color:#8c7a63; margin-top:8px;}
+        /* CARDÁPIO */
+        .card-sopa {
+            display: flex;
+            background: #2A2A2A;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            border: 1px solid #444;
+        }
 
-  .toast{
-    position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); z-index:100;
-    background:var(--cream); color:#241811; padding:13px 22px; border-radius:100px; font-weight:600;
-    font-size:.9rem; box-shadow:var(--shadow); opacity:0; pointer-events:none; transition:all .3s;
-  }
-  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+        .card-sopa img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
 
-  @media (max-width:860px){
-    .hero{grid-template-columns:1fr; padding-top:48px;}
-    .bowl-scene{order:-1; height:220px;}
-    .menu-grid{grid-template-columns:1fr 1fr; gap:14px;}
-    .steps{grid-template-columns:1fr;}
-    .nav-links{display:none;}
-  }
-  @media (max-width:520px){
-    .menu-grid{grid-template-columns:1fr;}
-    .hero p{max-width:100%;}
-  }
-</style>
+        .card-detalhes {
+            padding: 10px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-detalhes h3 {
+            font-size: 16px;
+            color: #FFF;
+        }
+
+        .preco {
+            color: var(--amarelo-principal);
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .btn-add {
+            background-color: var(--laranja-destaque);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            align-self: flex-end;
+        }
+
+        .btn-add:hover {
+            background-color: #BF360C;
+        }
+
+        /* FORMULÁRIO */
+        label {
+            display: block;
+            margin-top: 10px;
+            color: var(--texto-secundario);
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            background: #2A2A2A;
+            border: 1px solid #444;
+            color: #FFF;
+            border-radius: 5px;
+        }
+
+        .btn-enviar {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .btn-enviar:hover {
+            background-color: #1EBE5D;
+        }
+
+        .linha-resumo {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        /* COMPROVANTE VISUAL (ESCONDIDO) */
+        #comprovante-visual {
+            display: none;
+            width: 350px;
+            padding: 20px;
+            background: #FFFFFF;
+            color: #000000;
+            font-family: Arial, sans-serif;
+            border-radius: 8px;
+        }
+
+        #comprovante-visual h2 {
+            text-align: center;
+            color: #E65100;
+            margin-bottom: 5px;
+        }
+
+        #comprovante-visual hr {
+            border: 0;
+            border-top: 1px dashed #666;
+            margin: 10px 0;
+        }
+    </style>
 </head>
 <body>
 
-<header>
-  <div class="nav">
-    <div class="logo">
-      <svg class="logo-mark" viewBox="0 0 40 40" fill="none"><path d="M6 18h28a14 14 0 0 1-28 0Z" fill="#e8a437"/><rect x="4" y="16" width="32" height="4" rx="2" fill="#f6ecd9"/><path d="M14 10c-2 1-2 3 0 4M20 8c-2 1-2 3 0 4M26 10c-2 1-2 3 0 4" stroke="#f6ecd9" stroke-width="2" stroke-linecap="round"/></svg>
-      Sopas da Vovó
+    <header>
+        <img src="logo.jpg" alt="A Mulher da Sopa" class="logo-img">
+        <h1>A Mulher da Sopa</h1>
+        <p class="subtitulo">Sopa de rua, feita com amor!</p>
+    </header>
+
+    <div class="secao">
+        <h2>Cardápio do Dia</h2>
+
+        <div class="card-sopa">
+            <img src="sopa1.jpg" alt="Sopa Especial 1">
+            <div class="card-detalhes">
+                <h3>Sopa de Carne com Legumes</h3>
+                <span class="preco">R$ 15,00</span>
+                <button class="btn-add" onclick="adicionarItem('Sopa de Carne com Legumes', 15.00)">+ Adicionar</button>
+            </div>
+        </div>
+
+        <div class="card-sopa">
+            <img src="sopa2.jpg" alt="Sopa Especial 2">
+            <div class="card-detalhes">
+                <h3>Sopa Tradicional da Casa</h3>
+                <span class="preco">R$ 15,00</span>
+                <button class="btn-add" onclick="adicionarItem('Sopa Tradicional da Casa', 15.00)">+ Adicionar</button>
+            </div>
+        </div>
+
+        <div class="card-sopa">
+            <img src="sopa3.jpg" alt="Sopa Especial 3">
+            <div class="card-detalhes">
+                <h3>Sopa de Costela com Macarrão</h3>
+                <span class="preco">R$ 18,00</span>
+                <button class="btn-add" onclick="adicionarItem('Sopa de Costela com Macarrão', 18.00)">+ Adicionar</button>
+            </div>
+        </div>
     </div>
-    <nav class="nav-links">
-      <a href="#cardapio">Cardápio</a>
-      <a href="#como-funciona">Como funciona</a>
-      <a href="#contato">Contato</a>
-    </nav>
-    <button class="cart-btn" id="openCart" aria-label="Abrir carrinho">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 3h2l2.4 12.4a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L21 8H6" stroke="#241811" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="21" r="1.4" fill="#241811"/><circle cx="18" cy="21" r="1.4" fill="#241811"/></svg>
-      <span class="cart-badge" id="cartBadge" style="display:none;">0</span>
-    </button>
-  </div>
-</header>
 
-<section class="hero">
-  <div>
-    <span class="eyebrow">Feita todo dia, na panela</span>
-    <h1>Sopa quentinha,<br><em>direto pra sua mesa.</em></h1>
-    <p>Escolha o tamanho, monte seu pedido e receba o comprovante prontinho pra enviar no WhatsApp. Sem complicação, sem frio na barriga.</p>
-    <a href="#cardapio" class="btn-primary">Ver cardápio ↓</a>
-  </div>
-  <div class="bowl-scene">
-    <div class="steam"><div class="wisp"></div><div class="wisp"></div><div class="wisp"></div></div>
-    <svg class="bowl-svg" viewBox="0 0 260 160" fill="none">
-      <ellipse cx="130" cy="70" rx="118" ry="34" fill="#e8a437"/>
-      <path d="M12 70c0 44 53 76 118 76s118-32 118-76" fill="#c2822a"/>
-      <path d="M12 70c0 44 53 76 118 76s118-32 118-76" stroke="#8a5c1d" stroke-width="2" opacity=".3"/>
-      <ellipse cx="130" cy="68" rx="96" ry="22" fill="#f3c069"/>
-      <path d="M60 66c8-6 16-6 24 0s16 6 24 0 16-6 24 0 16 6 24 0" stroke="#c2822a" stroke-width="3" stroke-linecap="round" opacity=".6"/>
-      <rect x="4" y="82" width="252" height="14" rx="7" fill="#3c2b1d"/>
-    </svg>
-  </div>
-</section>
-
-<section id="cardapio" class="section">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Cardápio</span>
-      <h2>Sabores de hoje</h2>
-      <p>Todos os sabores saem nos três tamanhos. Toque no tamanho pra adicionar direto no carrinho.</p>
+    <div class="secao">
+        <h2>Seu Pedido</h2>
+        <div id="itens-carrinho">
+            <p style="color: var(--texto-secundario);">Seu carrinho está vazio.</p>
+        </div>
+        <hr style="border-color: #444; margin: 10px 0;">
+        <div class="linha-resumo" style="font-size: 18px; font-weight: bold;">
+            <span>Total:</span>
+            <span style="color: var(--amarelo-principal);">R$ <span id="total-valor">0,00</span></span>
+        </div>
     </div>
-    <div class="menu-grid" id="menuGrid"></div>
-  </div>
-</section>
 
-<section id="como-funciona" class="section">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Como funciona</span>
-      <h2>Do carrinho ao seu fogão</h2>
-    </div>
-    <div class="steps">
-      <div class="step"><span class="num mono">01</span><h3>Monte seu pedido</h3><p>Escolha os sabores e tamanhos que quiser, direto no cardápio acima.</p></div>
-      <div class="step"><span class="num mono">02</span><h3>Finalize e confira</h3><p>Preencha seus dados — a gente gera um comprovante com tudo certinho.</p></div>
-      <div class="step"><span class="num mono">03</span><h3>Envie no WhatsApp</h3><p>O comprovante em imagem é enviado direto pra loja. É só aguardar!</p></div>
-    </div>
-  </div>
-</section>
+    <div class="secao">
+        <h2>Dados para Entrega</h2>
+        <label>Nome Completo:</label>
+        <input type="text" id="nome" placeholder="Digite seu nome">
 
-<footer id="contato">
-  <p>Sopas da Vovó — feita com carinho, entregue com capricho.</p>
-  <p style="margin-top:6px;">Pedidos via WhatsApp: <a href="https://wa.me/5584999863991" target="_blank">(84) 99986-3991</a></p>
-</footer>
+        <label>Endereço de Entrega:</label>
+        <input type="text" id="endereco" placeholder="Rua, Número e Bairro">
 
-<div class="overlay" id="overlay"></div>
-<aside class="drawer" id="drawer" aria-label="Carrinho de compras">
-  <div class="drawer-head">
-    <h3>Seu carrinho</h3>
-    <button class="close-btn" id="closeCart" aria-label="Fechar">✕</button>
-  </div>
-  <div class="drawer-body" id="drawerBody">
-    <div class="empty-cart" id="emptyMsg">Seu carrinho está vazio.<br>Adicione uma sopinha! 🍲</div>
-    <div id="cartList"></div>
-
-    <form class="checkout-form" id="checkoutForm" style="display:none;">
-      <h4>Dados de entrega</h4>
-      <div class="field"><label for="nome">Nome completo</label><input id="nome" placeholder="Seu nome" required></div>
-      <div class="field"><label for="endereco">Endereço</label><input id="endereco" placeholder="Rua, número, bairro" required></div>
-      <div class="field"><label for="whatsapp">WhatsApp</label><input id="whatsapp" type="tel" placeholder="(84) 99999-9999" required></div>
-      <div class="field">
-        <label for="pagamento">Forma de pagamento</label>
+        <label>Forma de Pagamento:</label>
         <select id="pagamento">
-          <option>Pix</option>
-          <option>Cartão de Crédito/Débito</option>
-          <option>Dinheiro</option>
+            <option value="Pix">Pix</option>
+            <option value="Cartão de Débito/Crédito">Cartão de Débito/Crédito</option>
+            <option value="Dinheiro">Dinheiro</option>
         </select>
-      </div>
-    </form>
-  </div>
-  <div class="drawer-foot">
-    <div class="total-row"><span>Total</span><span id="totalVal">R$ 0,00</span></div>
-    <button class="btn-block" id="finalizeBtn" disabled>Adicione itens ao carrinho</button>
-  </div>
-</aside>
 
-<div id="recibo">
-  <h2>Sopas da Vovó</h2>
-  <div class="sub">Comprovante de pedido</div>
-  <hr>
-  <div class="row"><span class="label">Data/Hora</span><span id="rData"></span></div>
-  <div class="row"><span class="label">Cliente</span><span id="rNome"></span></div>
-  <div class="row"><span class="label">Endereço</span><span id="rEndereco"></span></div>
-  <div class="row"><span class="label">Pagamento</span><span id="rPagamento"></span></div>
-  <hr>
-  <div id="rItens"></div>
-  <hr>
-  <div class="row total"><span>TOTAL</span><span id="rTotal"></span></div>
-  <div class="thanks">Obrigado pela preferência! 🍲</div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
-const LOJA_WHATSAPP = '5584999863991';
-const TAMANHOS = [
-  {key:'350', label:'350ml'},
-  {key:'500', label:'500ml'},
-  {key:'1000', label:'1L'}
-];
-
-const PLACEHOLDER_SVGS = {
-  legumes: `<svg viewBox="0 0 200 150" width="100%" height="100%"><rect width="200" height="150" fill="#4a3524"/><circle cx="100" cy="75" r="46" fill="#8aab5f"/><circle cx="80" cy="60" r="10" fill="#c85a35"/><circle cx="118" cy="90" r="9" fill="#e8a437"/><circle cx="105" cy="55" r="7" fill="#f3c069"/></svg>`,
-  caldoverde: `<svg viewBox="0 0 200 150" width="100%" height="100%"><rect width="200" height="150" fill="#2e2015"/><circle cx="100" cy="75" r="46" fill="#5c7a3d"/><circle cx="85" cy="65" r="8" fill="#3c5228"/><circle cx="112" cy="82" r="8" fill="#3c5228"/><circle cx="95" cy="90" r="7" fill="#c2822a"/></svg>`,
-  canja: `<svg viewBox="0 0 200 150" width="100%" height="100%"><rect width="200" height="150" fill="#4a3524"/><circle cx="100" cy="75" r="46" fill="#e8c37a"/><circle cx="88" cy="68" r="9" fill="#f3ead0"/><circle cx="112" cy="85" r="8" fill="#f3ead0"/><circle cx="100" cy="60" r="6" fill="#8aab5f"/></svg>`
-};
-
-function defaultProdutos(){
-  return [
-    {id:'legumes', nome:'Sopa de Legumes', desc:'Legumes frescos e caldo temperado na medida certa.', imagem:'', precos:{'350':7,'500':10,'1000':20}},
-    {id:'caldoverde', nome:'Caldo Verde', desc:'Couve fatiada fina, linguiça defumada e batata amassada.', imagem:'', precos:{'350':7,'500':10,'1000':20}},
-    {id:'canja', nome:'Canja de Galinha', desc:'Frango desfiado, arroz soltinho e um toque de limão.', imagem:'', precos:{'350':7,'500':10,'1000':20}}
-  ];
-}
-
-function getProdutos(){
-  try{
-    const raw = localStorage.getItem('sopaProdutos');
-    if(raw) return JSON.parse(raw);
-  }catch(e){}
-  const d = defaultProdutos();
-  localStorage.setItem('sopaProdutos', JSON.stringify(d));
-  return d;
-}
-
-function fmt(n){ return 'R$ ' + n.toFixed(2).replace('.', ','); }
-
-let carrinho = [];
-
-function renderMenu(){
-  const produtos = getProdutos();
-  const grid = document.getElementById('menuGrid');
-  grid.innerHTML = produtos.map(p => `
-    <div class="card">
-      <div class="card-img">${p.imagem ? `<img src="${p.imagem}" alt="${p.nome}">` : (PLACEHOLDER_SVGS[p.id] || PLACEHOLDER_SVGS.legumes)}</div>
-      <div class="card-body">
-        <h3>${p.nome}</h3>
-        <div class="desc">${p.desc || ''}</div>
-        <div class="sizes">
-          ${TAMANHOS.map(t => `
-            <button class="size-btn" data-id="${p.id}" data-tam="${t.key}" onclick="addAoCarrinho('${p.id}','${t.key}')">
-              <span class="lbl">${t.label}</span>
-              <span class="val mono">${fmt(Number(p.precos[t.key]||0))}</span>
-            </button>
-          `).join('')}
-        </div>
-      </div>
+        <button class="btn-enviar" onclick="finalizarEEnviar()">Enviar Pedido no WhatsApp</button>
     </div>
-  `).join('');
-}
 
-function addAoCarrinho(produtoId, tamKey){
-  const produtos = getProdutos();
-  const p = produtos.find(x => x.id === produtoId);
-  if(!p) return;
-  const tam = TAMANHOS.find(t => t.key === tamKey);
-  const preco = Number(p.precos[tamKey] || 0);
-  const chave = produtoId + '_' + tamKey;
-  const existente = carrinho.find(i => i.chave === chave);
-  if(existente){ existente.quantidade++; }
-  else { carrinho.push({chave, nome:p.nome, tamanho:tam.label, preco, quantidade:1}); }
-  renderCarrinho();
-  showToast(p.nome + ' (' + tam.label + ') adicionado');
-  openDrawer();
-}
-
-function alterarQtd(chave, delta){
-  const item = carrinho.find(i => i.chave === chave);
-  if(!item) return;
-  item.quantidade += delta;
-  if(item.quantidade <= 0) carrinho = carrinho.filter(i => i.chave !== chave);
-  renderCarrinho();
-}
-
-function removerItem(chave){
-  carrinho = carrinho.filter(i => i.chave !== chave);
-  renderCarrinho();
-}
-
-function renderCarrinho(){
-  const list = document.getElementById('cartList');
-  const empty = document.getElementById('emptyMsg');
-  const form = document.getElementById('checkoutForm');
-  const finalizeBtn = document.getElementById('finalizeBtn');
-  const badge = document.getElementById('cartBadge');
-  const totalCount = carrinho.reduce((s,i)=>s+i.quantidade,0);
-
-  if(totalCount > 0){ badge.style.display='flex'; badge.textContent = totalCount; }
-  else { badge.style.display='none'; }
-
-  if(carrinho.length === 0){
-    empty.style.display='block'; list.innerHTML=''; form.style.display='none';
-    finalizeBtn.disabled = true; finalizeBtn.textContent = 'Adicione itens ao carrinho';
-  } else {
-    empty.style.display='none'; form.style.display='block';
-    finalizeBtn.disabled = false; finalizeBtn.textContent = 'Finalizar e enviar pedido';
-    list.innerHTML = carrinho.map(i => `
-      <div class="cart-item">
-        <div class="info">
-          <div class="nm">${i.nome}</div>
-          <div class="sz">${i.tamanho}</div>
+    <div id="comprovante-visual">
+        <h2>A MULHER DA SOPA</h2>
+        <p style="text-align: center; font-size: 12px; color: #555;">Sopa de rua, feita com amor!</p>
+        <hr>
+        <p><strong>Data:</strong> <span id="recibo-data"></span></p>
+        <p><strong>Cliente:</strong> <span id="recibo-nome"></span></p>
+        <p><strong>Endereço:</strong> <span id="recibo-endereco"></span></p>
+        <p><strong>Pagamento:</strong> <span id="recibo-pagamento"></span></p>
+        <hr>
+        <div id="recibo-itens"></div>
+        <hr>
+        <div style="display: flex; justify-content: space-between; font-size: 18px; font-weight: bold;">
+            <span>TOTAL:</span>
+            <span>R$ <span id="recibo-total">0,00</span></span>
         </div>
-        <div class="qty">
-          <button onclick="alterarQtd('${i.chave}',-1)" aria-label="Diminuir">−</button>
-          <span>${i.quantidade}</span>
-          <button onclick="alterarQtd('${i.chave}',1)" aria-label="Aumentar">+</button>
-        </div>
-        <div class="item-price">${fmt(i.preco*i.quantidade)}</div>
-        <button class="rm-btn" onclick="removerItem('${i.chave}')" aria-label="Remover">✕</button>
-      </div>
-    `).join('');
-  }
-  const total = carrinho.reduce((s,i)=>s+i.preco*i.quantidade,0);
-  document.getElementById('totalVal').textContent = fmt(total);
-}
+        <hr>
+        <p style="text-align: center; font-size: 11px;">Obrigado pela preferência!</p>
+    </div>
 
-function openDrawer(){ document.getElementById('drawer').classList.add('open'); document.getElementById('overlay').classList.add('open'); }
-function closeDrawer(){ document.getElementById('drawer').classList.remove('open'); document.getElementById('overlay').classList.remove('open'); }
+    <script>
+        let carrinho = [];
+        const numeroLoja = '558499863991'; // Número com DDD atualizado
 
-document.getElementById('openCart').addEventListener('click', openDrawer);
-document.getElementById('closeCart').addEventListener('click', closeDrawer);
-document.getElementById('overlay').addEventListener('click', closeDrawer);
+        function adicionarItem(nome, preco) {
+            const item = carrinho.find(i => i.nome === nome);
+            if (item) {
+                item.qtd++;
+            } else {
+                carrinho.push({ nome, preco, qtd: 1 });
+            }
+            atualizarTela();
+        }
 
-function showToast(msg){
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  clearTimeout(window._toastTimer);
-  window._toastTimer = setTimeout(()=>t.classList.remove('show'), 2200);
-}
+        function atualizarTela() {
+            const container = document.getElementById('itens-carrinho');
+            const totalEl = document.getElementById('total-valor');
 
-function salvarPedido(pedido){
-  try{
-    const raw = localStorage.getItem('sopaPedidos');
-    const pedidos = raw ? JSON.parse(raw) : [];
-    pedidos.unshift(pedido);
-    localStorage.setItem('sopaPedidos', JSON.stringify(pedidos));
-  }catch(e){ console.error('Erro ao salvar pedido:', e); }
-}
+            if (carrinho.length === 0) {
+                container.innerHTML = '<p style="color: var(--texto-secundario);">Seu carrinho está vazio.</p>';
+                totalEl.innerText = '0,00';
+                return;
+            }
 
-document.getElementById('finalizeBtn').addEventListener('click', async () => {
-  const nome = document.getElementById('nome').value.trim();
-  const endereco = document.getElementById('endereco').value.trim();
-  const whatsapp = document.getElementById('whatsapp').value.trim();
-  const pagamento = document.getElementById('pagamento').value;
+            let html = '';
+            let total = 0;
 
-  if(!nome || !endereco || !whatsapp || carrinho.length === 0){
-    showToast('Preencha todos os campos, por favor');
-    return;
-  }
+            carrinho.forEach(item => {
+                const subtotal = item.preco * item.qtd;
+                total += subtotal;
+                html += `
+                    <div class="linha-resumo">
+                        <span>${item.qtd}x ${item.nome}</span>
+                        <span>R$ ${subtotal.toFixed(2).replace('.', ',')}</span>
+                    </div>
+                `;
+            });
 
-  const btn = document.getElementById('finalizeBtn');
-  btn.disabled = true; btn.textContent = 'Gerando comprovante...';
+            container.innerHTML = html;
+            totalEl.innerText = total.toFixed(2).replace('.', ',');
+        }
 
-  const agora = new Date();
-  const formatter = new Intl.DateTimeFormat('pt-BR', {
-    timeZone: 'America/Sao_Paulo', day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit'
-  });
-  const horarioBrasilia = formatter.format(agora);
+        async function finalizarEEnviar() {
+            const nome = document.getElementById('nome').value.trim();
+            const endereco = document.getElementById('endereco').value.trim();
+            const pagamento = document.getElementById('pagamento').value;
 
-  document.getElementById('rData').textContent = horarioBrasilia;
-  document.getElementById('rNome').textContent = nome;
-  document.getElementById('rEndereco').textContent = endereco;
-  document.getElementById('rPagamento').textContent = pagamento;
+            if (!nome || !endereco || carrinho.length === 0) {
+                alert('Preencha seu nome, endereço e escolha pelo menos uma sopa!');
+                return;
+            }
 
-  let total = 0, itensTexto = '', itensHtml = '';
-  carrinho.forEach(i => {
-    const sub = i.preco * i.quantidade;
-    total += sub;
-    itensHtml += `<div class="row"><span>${i.quantidade}x ${i.nome} (${i.tamanho})</span><span>${fmt(sub)}</span></div>`;
-    itensTexto += `• ${i.quantidade}x ${i.nome} (${i.tamanho}) — ${fmt(sub)}\n`;
-  });
-  document.getElementById('rItens').innerHTML = itensHtml;
-  document.getElementById('rTotal').textContent = fmt(total);
+            // Data e Hora de Brasília
+            const agora = new Date();
+            const dataFormatada = new Intl.DateTimeFormat('pt-BR', {
+                timeZone: 'America/Sao_Paulo',
+                day: '2-digit', month: '2-digit', year: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            }).format(agora);
 
-  const reciboEl = document.getElementById('recibo');
-  reciboEl.style.left = '0px'; reciboEl.style.top = '-9999px';
+            // Preenche o recibo para gerar a imagem
+            document.getElementById('recibo-data').innerText = dataFormatada;
+            document.getElementById('recibo-nome').innerText = nome;
+            document.getElementById('recibo-endereco').innerText = endereco;
+            document.getElementById('recibo-pagamento').innerText = pagamento;
 
-  let blobImagem = null;
-  try{
-    const canvas = await html2canvas(reciboEl, {scale:2, logging:false, useCORS:true});
-    blobImagem = await new Promise(res => canvas.toBlob(res, 'image/png'));
-  }catch(err){ console.error('Erro ao gerar imagem', err); }
-  reciboEl.style.left = '-9999px';
+            let totalCalculado = 0;
+            let itensTexto = '';
+            let itensHtml = '';
 
-  salvarPedido({
-    id: agora.getTime(),
-    dataHora: horarioBrasilia,
-    cliente: {nome, endereco, whatsapp, pagamento},
-    itens: carrinho.map(i => ({nome:i.nome, tamanho:i.tamanho, quantidade:i.quantidade, preco:i.preco})),
-    total,
-    status: 'Novo'
-  });
+            carrinho.forEach(item => {
+                const sub = item.preco * item.qtd;
+                totalCalculado += sub;
+                const subFmt = sub.toFixed(2).replace('.', ',');
+                itensHtml += `<div class="linha-resumo"><span>${item.qtd}x ${item.nome}</span><span>R$ ${subFmt}</span></div>`;
+                itensTexto += `• ${item.qtd}x ${item.nome} (R$ ${subFmt})\n`;
+            });
 
-  const mensagemTexto = `*NOVO PEDIDO* - ${horarioBrasilia}\n\n*Cliente:* ${nome}\n*Endereço:* ${endereco}\n*Pagamento:* ${pagamento}\n\n*ITENS:*\n${itensTexto}\n*TOTAL:* ${fmt(total)}`;
+            const totalFmt = totalCalculado.toFixed(2).replace('.', ',');
+            document.getElementById('recibo-itens').innerHTML = itensHtml;
+            document.getElementById('recibo-total').innerText = totalFmt;
 
-  if(blobImagem){
-    const nomeArquivo = `comprovante-${agora.getTime()}.png`;
-    const arquivo = new File([blobImagem], nomeArquivo, {type:'image/png'});
-    if(navigator.canShare && navigator.canShare({files:[arquivo]})){
-      try{
-        await navigator.share({files:[arquivo], title:'Comprovante do Pedido', text: mensagemTexto});
-        finalizarLimpeza();
-        return;
-      }catch(err){ console.log('Compartilhamento cancelado', err); }
-    }
-    showToast('Comprovante baixado — anexe no WhatsApp que vai abrir');
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blobImagem);
-    link.download = nomeArquivo;
-    link.click();
-  }
+            // Renderiza imagem
+            const reciboVisual = document.getElementById('comprovante-visual');
+            reciboVisual.style.display = 'block';
 
-  const urlZap = `https://wa.me/${LOJA_WHATSAPP}?text=${encodeURIComponent(mensagemTexto)}`;
-  window.open(urlZap, '_blank');
-  finalizarLimpeza();
+            let blobImagem = null;
+            try {
+                const canvas = await html2canvas(reciboVisual, { scale: 2 });
+                blobImagem = await new Promise(res => canvas.toBlob(res, 'image/png'));
+            } catch (err) {
+                console.error("Erro ao converter imagem", err);
+            } finally {
+                reciboVisual.style.display = 'none';
+            }
 
-  function finalizarLimpeza(){
-    carrinho = [];
-    renderCarrinho();
-    document.getElementById('nome').value='';
-    document.getElementById('endereco').value='';
-    document.getElementById('whatsapp').value='';
-    btn.disabled = false;
-    closeDrawer();
-  }
-});
+            const mensagem = `*NOVO PEDIDO - A MULHER DA SOPA*\n` +
+                `*Data:* ${dataFormatada}\n\n` +
+                `*Cliente:* ${nome}\n` +
+                `*Endereço:* ${endereco}\n` +
+                `*Pagamento:* ${pagamento}\n\n` +
+                `*ITENS:*\n${itensTexto}\n` +
+                `*TOTAL:* R$ ${totalFmt}`;
 
-renderMenu();
-renderCarrinho();
-window.addEventListener('storage', renderMenu);
-</script>
+            if (blobImagem) {
+                const arquivo = new File([blobImagem], `comprovante.png`, { type: 'image/png' });
+
+                // Tentativa de compartilhamento direto da imagem (Mobile)
+                if (navigator.canShare && navigator.canShare({ files: [arquivo] })) {
+                    try {
+                        await navigator.share({
+                            files: [arquivo],
+                            title: 'Comprovante do Pedido',
+                            text: mensagem
+                        });
+                        return;
+                    } catch (e) {
+                        console.log(e);
+                    }
+                }
+
+                // Download da imagem caso o compartilhamento nativo falhe/seja desktop
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blobImagem);
+                link.download = `comprovante.png`;
+                link.click();
+                alert('A imagem do comprovante foi salva no seu dispositivo. Anexe-a na conversa que abrirá!');
+            }
+
+            // Redirecionamento padrão para o WhatsApp da Loja
+            window.open(`https://wa.me/${numeroLoja}?text=${encodeURIComponent(mensagem)}`, '_blank');
+        }
+    </script>
 </body>
 </html>
